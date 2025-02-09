@@ -17,21 +17,11 @@ const login = async (req, res) => {
 };
 
 const dashboard = async (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    throw new CustomAPIError("no token provided", 401);
-  }
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decode = jwt.verify(token, process.env.jwtSecret);
-    const luckyNumbers = Math.floor(Math.random() * 100);
-    return res.status(200).json({
-      msg: `hello wllcome to the dashboard ${decode.username} here is your secret key ${luckyNumbers}`,
-    });
-  } catch (error) {
-    throw new CustomAPIError("Not authorize to access this route", 401);
-  }
+  const luckyNumbers = Math.floor(Math.random() * 100);
+  const { id, username } = req.user;
+  return res.status(200).json({
+    msg: `hello wellcome to the dashboard ${username} here is your secret key ${luckyNumbers}`,
+  });
 };
 module.exports = {
   login,
